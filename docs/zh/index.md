@@ -22,7 +22,7 @@ head:
 hero:
   name: "jigsaw"
   text: "拼图小游戏"
-  tagline: "也许是最适合年轻人使用的第三方 WinPE 🎉"
+  tagline: "使用 Swing 构建的拼图小游戏 --- jigsaw 🎉"
   image:  # text 和 tagline 区域旁的图片
     src: /logo.svg
     alt: "jigsaw"

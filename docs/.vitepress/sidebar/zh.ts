@@ -9,7 +9,7 @@ export const zhSidebar: DefaultTheme.Sidebar = {
       items: [
         { text: '快速开始', link: `/guide/quickstart/` },
         { text: '理念', link: `/guide/philosophy/` },
-        { text: '为什么选择 FirPE？', link: `/guide/why/` },
+        { text: '选择 jigsaw 的目的', link: `/guide/aim/` },
       ]
     },
     {
