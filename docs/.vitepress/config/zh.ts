@@ -17,10 +17,6 @@ export const zhConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
       level: [1, 6],
       label: '目录'
     },
-    //大纲顶部标题
-    outline :{
-      label: '当前页大纲'
-    },
     editLink: {
       pattern: 'https://github.com/834772509/FirPE-Docs/edit/main/docs/:path',
       text: '在 GitHub 编辑本页'
