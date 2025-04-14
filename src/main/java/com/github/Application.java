@@ -1,5 +1,7 @@
 package com.github;
 
+import com.github.ui.GameJFrame;
+
 /**
  * @author 许大仙
  * @version 1.0
@@ -7,7 +9,9 @@ package com.github;
  */
 public class Application {
     public static void main(String[] args) {
-        System.out.println("Hello World");
+        // new LoginJFrame();
+        // new RegisterJFrame();
+        new GameJFrame();
     }
 }
 
