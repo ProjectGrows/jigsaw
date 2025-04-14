@@ -6,6 +6,5 @@ export const zhNav: DefaultTheme.NavItem[] = [
   { text: '🚀快速开始', link: '/guide/quickstart/' },
   { text: '🆘常见问题', link: '/faq/' },
   { text: '📝更新日志', link: '/change/' },
-  { text: '📥如何下载', link: '/download/' },
   { text: '🌟关于我们', link: '/about/' },
 ]

@@ -8,7 +8,6 @@ export const zhSidebar: DefaultTheme.Sidebar = {
       collapsed: false,
       items: [
         { text: '快速开始', link: `/guide/quickstart/` },
-        { text: '理念', link: `/guide/philosophy/` },
         { text: '选择 jigsaw 的目的', link: `/guide/aim/` },
       ]
     },
