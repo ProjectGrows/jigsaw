@@ -14,6 +14,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
@@ -28,7 +29,7 @@ public class ImageUtil {
             dirPath = Paths.get(resource.toURI());
         }
 
-        if (!Files.exists(dirPath) || !Files.isDirectory(dirPath)) {
+        if (Objects.isNull(dirPath) || !Files.exists(dirPath) || !Files.isDirectory(dirPath)) {
             throw new IllegalArgumentException("目录不存在或不是一个有效的目录：" + directoryPath);
         }
 
@@ -46,17 +47,14 @@ public class ImageUtil {
                     .sorted(Comparator.comparingInt(
                             o -> Integer.parseInt(getFileNameWithoutExtension(String.valueOf(o.getFileName())))))
                     .toList();
-
             for (Path path : paths) {
                 ImageIcon imageIcon = new ImageIcon(path.toFile().getAbsolutePath());
                 JLabel jLabel = new JLabel(imageIcon);
                 // 指定图片的位置
                 jLabel.setBounds(xPosition, yPosition, imageWidth, imageHeight);
                 jLabelList.add(jLabel);
-
                 // 更新 X 坐标
                 xPosition += imageWidth;
-
                 // 如果需要换行，重置 X 坐标并更新 Y 坐标
                 if (xPosition >= someMaxWidth) { // someMaxWidth 是你希望的最大宽度
                     xPosition = 0;
