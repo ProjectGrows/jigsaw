@@ -106,7 +106,7 @@ export const sharedConfig = withMermaid(defineConfig({
     },
   },
   sitemap: {
-    hostname: `https://firpe.cn${VITE_BASE_URL}`,
+    hostname: `https://github.com/ProjectGrows/jigsaw${VITE_BASE_URL}`,
   },
   markdown: { // markdown 配置
     math: true,
