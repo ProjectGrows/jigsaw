@@ -23,6 +23,8 @@ import java.util.Random;
 public class GameJFrame extends JFrame implements KeyListener {
 
     private final int[][] data = new int[4][4];
+    // 图片路径
+    private final String path = "assets/animal/animal3/";
     // 定义一个二维数组，存储正确的数据
     int[][] win = {
         {1, 2, 3, 4},
@@ -109,8 +111,7 @@ public class GameJFrame extends JFrame implements KeyListener {
                 if (num == 0) {
                     imageIcon = new ImageIcon();
                 } else {
-                    URL resource =
-                            this.getClass().getClassLoader().getResource("assets/animal/animal3/" + num + ".jpg");
+                    URL resource = this.getClass().getClassLoader().getResource(path + num + ".jpg");
                     File file = new File(Objects.requireNonNull(resource).toURI());
                     imageIcon = new ImageIcon(file.getAbsolutePath());
                 }
@@ -170,7 +171,35 @@ public class GameJFrame extends JFrame implements KeyListener {
      */
     private JMenu createFunctionJMenu() {
         JMenu jMenu = new JMenu("功能");
-        JMenuItem changeImagesJMenuItem = new JMenuItem("更换图片");
+        JMenu changeImageMenu = new JMenu("更换图片");
+        JMenu changeAnimalMenu = new JMenu("更换动物");
+        JMenuItem changeAnimal1Item = new JMenuItem("更换动物1");
+        changeAnimalMenu.add(changeAnimal1Item);
+        JMenuItem changeAnimal2Item = new JMenuItem("更换动物2");
+        changeAnimalMenu.add(changeAnimal2Item);
+        JMenuItem changeAnimal3Item = new JMenuItem("更换动物3");
+        changeAnimalMenu.add(changeAnimal3Item);
+        JMenuItem changeAnimal4Item = new JMenuItem("更换动物4");
+        changeAnimalMenu.add(changeAnimal4Item);
+        JMenuItem changeAnimal5Item = new JMenuItem("更换动物5");
+        changeAnimalMenu.add(changeAnimal5Item);
+        JMenuItem changeAnimal6Item = new JMenuItem("更换动物6");
+        changeAnimalMenu.add(changeAnimal6Item);
+        JMenuItem changeAnimal7Item = new JMenuItem("更换动物7");
+        changeAnimalMenu.add(changeAnimal7Item);
+        JMenuItem changeAnimal8Item = new JMenuItem("更换动物8");
+        changeAnimalMenu.add(changeAnimal8Item);
+        changeImageMenu.add(changeAnimalMenu);
+        JMenu changeGirlMenu = new JMenu("更换美女");
+        changeImageMenu.add(changeGirlMenu);
+        JMenu changeSportMenu = new JMenu("更换运动");
+        changeImageMenu.add(changeSportMenu);
+        // changeImagesJMenuItem.addActionListener(e -> {
+        //     path = "assets/animal/animal2/";
+        //     step = 0;
+        //     initData();
+        //     initImage();
+        // });
         JMenuItem replayGameJMenuItem = new JMenuItem("重新游戏");
         replayGameJMenuItem.addActionListener(e -> {
             step = 0;
@@ -188,7 +217,7 @@ public class GameJFrame extends JFrame implements KeyListener {
         JMenuItem exitJMenuItem = new JMenuItem("退出");
         exitJMenuItem.addActionListener(e -> System.exit(0));
 
-        jMenu.add(changeImagesJMenuItem);
+        jMenu.add(changeImageMenu);
         jMenu.add(replayGameJMenuItem);
         jMenu.add(OneClickWinJMenuItem);
         jMenu.add(exitJMenuItem);
@@ -230,7 +259,7 @@ public class GameJFrame extends JFrame implements KeyListener {
             // 清空原本出现的图片
             this.getContentPane().removeAll();
             // 显示完整图片
-            URL resource = this.getClass().getClassLoader().getResource("assets/animal/animal3/all.jpg");
+            URL resource = this.getClass().getClassLoader().getResource(path + "/all.jpg");
             File file = new File(Objects.requireNonNull(resource).toURI());
             JLabel allJLabel = new JLabel(new ImageIcon(file.getAbsolutePath()));
             allJLabel.setBounds(83, 134, 420, 420);
