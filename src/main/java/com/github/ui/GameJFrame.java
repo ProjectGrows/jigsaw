@@ -23,12 +23,19 @@ import java.util.Random;
 public class GameJFrame extends JFrame implements KeyListener {
 
     private final int[][] data = new int[4][4];
-
+    // 定义一个二维数组，存储正确的数据
+    int[][] win = {
+        {1, 2, 3, 4},
+        {5, 6, 7, 8},
+        {9, 10, 11, 12},
+        {13, 14, 15, 0}
+    };
     // 0 的横坐标
     private int x = 0;
-
     // 0 的纵坐标
     private int y = 0;
+    // 定义变量用来统计步数
+    private int step = 0;
 
     public GameJFrame() throws HeadlessException {
         this("拼图单机版 v1.0");
@@ -48,6 +55,7 @@ public class GameJFrame extends JFrame implements KeyListener {
      * 初始化数据（打乱）
      */
     private void initData() {
+        log.info("{}", "initData()");
         // 1.定义一个一维数组
         int[] tempArr = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
         // 2.打乱数组中的数据的顺序
@@ -68,9 +76,8 @@ public class GameJFrame extends JFrame implements KeyListener {
             if (tempArr[i] == 0) {
                 x = i / 4;
                 y = i % 4;
-            } else {
-                data[i / 4][i % 4] = tempArr[i];
             }
+            data[i / 4][i % 4] = tempArr[i];
         }
     }
 
@@ -79,8 +86,21 @@ public class GameJFrame extends JFrame implements KeyListener {
      */
     @SneakyThrows
     private void initImage() {
+        log.info("{}", "initImage()");
         // 清空原本已经出现的所有图片
         this.getContentPane().removeAll();
+        // 如果胜利
+        if (victory()) {
+            URL resource = this.getClass().getClassLoader().getResource("assets/win.png");
+            File file = new File(Objects.requireNonNull(resource).toURI());
+            JLabel winJLabel = new JLabel(new ImageIcon(file.getAbsolutePath()));
+            winJLabel.setBounds(203, 283, 197, 73);
+            this.getContentPane().add(winJLabel);
+        }
+        // 步数
+        JLabel stepCount = new JLabel("步数：" + step);
+        stepCount.setBounds(50, 30, 100, 20);
+        this.getContentPane().add(stepCount);
         // 添加图片
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
@@ -152,6 +172,11 @@ public class GameJFrame extends JFrame implements KeyListener {
         JMenu jMenu = new JMenu("功能");
         JMenuItem changeImagesJMenuItem = new JMenuItem("更换图片");
         JMenuItem replayGameJMenuItem = new JMenuItem("重新游戏");
+        replayGameJMenuItem.addActionListener(e -> {
+            step = 0;
+            initData();
+            initImage();
+        });
         JMenuItem OneClickClearanceJMenuItem = new JMenuItem("一键通关");
         JMenuItem exitJMenuItem = new JMenuItem("退出");
         exitJMenuItem.addActionListener(e -> System.exit(0));
@@ -195,32 +220,35 @@ public class GameJFrame extends JFrame implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         log.info("{}", Arrays.deepToString(data));
+        // 判断游戏是否胜利，如果胜利，此方法需要直接结束
+        if (victory()) {
+            return;
+        }
         int keyCode = e.getKeyCode();
         // 38 上 37 左 39 右  40 下
         log.info(" keyReleased {}", keyCode);
         switch (keyCode) {
             case 37 -> {
+                // 将空白方块右方的图片向左移动
                 log.info("{}", "左");
-                // 表示空白方块已经在最下方了，他的下面没有图片再能移动了
                 if (y == 3) {
                     return;
                 }
                 swapImages(x, y, x, y + 1);
                 y++;
+                step++;
                 initImage();
                 log.info("{}", Arrays.deepToString(data));
             }
             case 38 -> {
                 // 将空白方块下方的图片向上移动
                 log.info("{}", "上");
-                // 表示空白方块已经在最下方了，他的下面没有图片再能移动了
                 if (x == 3) {
                     return;
                 }
-                // 2,1 --> 1,1
                 swapImages(x, y, x + 1, y);
                 x++;
-                // 调用方法按照最新的数字加载图片
+                step++;
                 initImage();
                 log.info("{}", Arrays.deepToString(data));
             }
@@ -232,7 +260,7 @@ public class GameJFrame extends JFrame implements KeyListener {
                 }
                 swapImages(x, y, x, y - 1);
                 y--;
-                // 调用方法按照最新的数字加载图片
+                step++;
                 initImage();
                 log.info("{}", Arrays.deepToString(data));
             }
@@ -243,11 +271,26 @@ public class GameJFrame extends JFrame implements KeyListener {
                 }
                 swapImages(x, y, x - 1, y);
                 x--;
-                // 调用方法按照最新的数字加载图片
+                step++;
                 initImage();
                 log.info("{}", Arrays.deepToString(data));
             }
         }
+    }
+
+    public boolean victory() {
+        for (int i = 0; i < data.length; i++) {
+            // i : 依次表示二维数组 data里面的索引
+            // data[i]：依次表示每一个一维数组
+            for (int j = 0; j < data[i].length; j++) {
+                if (data[i][j] != win[i][j]) {
+                    // 只要有一个数据不一样，则返回false
+                    return false;
+                }
+            }
+        }
+        // 循环结束表示数组遍历比较完毕，全都一样返回true
+        return true;
     }
 
     /**
