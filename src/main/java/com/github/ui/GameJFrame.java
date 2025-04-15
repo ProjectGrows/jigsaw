@@ -22,7 +22,6 @@ import java.util.Random;
 @Slf4j
 public class GameJFrame extends JFrame implements KeyListener {
 
-    private final int[][] data = new int[4][4];
     // 定义一个二维数组，存储正确的数据
     int[][] win = {
         {1, 2, 3, 4},
@@ -30,6 +29,7 @@ public class GameJFrame extends JFrame implements KeyListener {
         {9, 10, 11, 12},
         {13, 14, 15, 0}
     };
+    private int[][] data = new int[4][4];
     // 0 的横坐标
     private int x = 0;
     // 0 的纵坐标
@@ -177,13 +177,18 @@ public class GameJFrame extends JFrame implements KeyListener {
             initData();
             initImage();
         });
-        JMenuItem OneClickClearanceJMenuItem = new JMenuItem("一键通关");
+        JMenuItem OneClickWinJMenuItem = new JMenuItem("一键通关");
+        OneClickWinJMenuItem.addActionListener(e -> {
+            step = 0;
+            data = win;
+            initImage();
+        });
         JMenuItem exitJMenuItem = new JMenuItem("退出");
         exitJMenuItem.addActionListener(e -> System.exit(0));
 
         jMenu.add(changeImagesJMenuItem);
         jMenu.add(replayGameJMenuItem);
-        jMenu.add(OneClickClearanceJMenuItem);
+        jMenu.add(OneClickWinJMenuItem);
         jMenu.add(exitJMenuItem);
         return jMenu;
     }
