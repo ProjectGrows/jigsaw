@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
@@ -39,10 +40,8 @@ public class ImageUtil {
         int imageHeight = 105; // 图片高度
         int someMaxWidth = 105 * 4;
 
-        try {
-            // 收集所有符合条件的文件路径
-            List<Path> paths = Files.list(dirPath)
-                    .filter(path -> path.toString().toLowerCase().endsWith(".jpg")
+        try (Stream<Path> list = Files.list(dirPath)) {
+            List<Path> paths = list.filter(path -> path.toString().toLowerCase().endsWith(".jpg")
                             && !path.toString().contains("all"))
                     .sorted(Comparator.comparingInt(
                             o -> Integer.parseInt(getFileNameWithoutExtension(String.valueOf(o.getFileName())))))
@@ -65,16 +64,46 @@ public class ImageUtil {
             // 处理目录迭代异常
             throw new IOException("无法遍历目录: " + directoryPath, e);
         }
-
         return jLabelList;
     }
 
+    public static JLabel[][] loadImagesAsGrid(String directoryPath, int rows, int cols)
+            throws IOException, URISyntaxException {
+        // 加载图片列表
+        List<JLabel> jLabelList = loadImages(directoryPath);
+
+        // 创建二维数组
+        JLabel[][] grid = new JLabel[rows][cols];
+
+        // 填充二维数组
+        int index = 0;
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                if (index < jLabelList.size()) {
+                    grid[row][col] = jLabelList.get(index++);
+                } else {
+                    // 如果图片不足，填充空的 JLabel
+                    JLabel jLabel = new JLabel();
+                    jLabel.setBounds(315, 315, 105, 105);
+                    grid[row][col] = jLabel;
+                }
+            }
+        }
+        return grid;
+    }
+
+    /**
+     * 获取去除扩展名的文件名
+     *
+     * @param fileName 文件名
+     * @return 去除扩展名的文件名
+     */
     public static String getFileNameWithoutExtension(String fileName) {
         int dotIndex = fileName.lastIndexOf('.');
         if (dotIndex > 0 && dotIndex < fileName.length() - 1) {
             return fileName.substring(0, dotIndex);
         } else {
-            return fileName; // 没有后缀或者后缀在文件名开头/结尾
+            return fileName;
         }
     }
 }

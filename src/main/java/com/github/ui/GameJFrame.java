@@ -1,17 +1,23 @@
 package com.github.ui;
 
 import com.github.utils.ImageUtil;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
+import java.security.SecureRandom;
+import java.util.Arrays;
+import java.util.Random;
 
 /**
  * 游戏的主界面，和游戏相关的所有逻辑都写在这个类中
  */
 @Slf4j
 public class GameJFrame extends JFrame {
+
+    private final Random random = new SecureRandom();
+    private JLabel[][] imageJLabelArrArr;
 
     public GameJFrame() throws HeadlessException {
         this("拼图单机版 v1.0");
@@ -21,6 +27,7 @@ public class GameJFrame extends JFrame {
         super(title);
         initJFrame();
         initJMenuBar();
+        loadImage();
         initImage();
         // 让界面显示出来
         this.setVisible(true);
@@ -30,14 +37,48 @@ public class GameJFrame extends JFrame {
      * 初始化图片
      */
     private void initImage() {
-        try {
-            List<JLabel> imageIconList = ImageUtil.loadImages("assets/animal/animal3");
-            imageIconList.forEach(icon -> {
-                this.getContentPane().add(icon);
-            });
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+
+        JLabel[] imageJLabelArr =
+                Arrays.stream(imageJLabelArrArr).flatMap(Arrays::stream).toArray(JLabel[]::new);
+        for (int i = 0; i < imageJLabelArr.length; i++) {
+            int index = random.nextInt(imageJLabelArr.length);
+            // 交换 JLabel 对象
+            JLabel temp = imageJLabelArr[index];
+            imageJLabelArr[index] = imageJLabelArr[i];
+            imageJLabelArr[i] = temp;
+            // 更新交换后的位置
+            int tempX = imageJLabelArr[index].getX();
+            int tempY = imageJLabelArr[index].getY();
+            imageJLabelArr[index].setBounds(
+                    imageJLabelArr[i].getX(),
+                    imageJLabelArr[i].getY(),
+                    imageJLabelArr[index].getWidth(),
+                    imageJLabelArr[index].getHeight());
+            imageJLabelArr[i].setBounds(tempX, tempY, imageJLabelArr[i].getWidth(), imageJLabelArr[i].getHeight());
         }
+
+        // 再将转换之后的一维数组设置到二维数组中
+        int index = 0;
+        for (int i = 0; i < imageJLabelArrArr.length; i++) {
+            for (int j = 0; j < imageJLabelArrArr[i].length; j++) {
+                imageJLabelArrArr[i][j] = imageJLabelArr[index++];
+            }
+        }
+
+        // 将图片组件再添加到 ContentPane 中
+        for (JLabel[] imageJLabel : imageJLabelArrArr) {
+            for (JLabel jLabel : imageJLabel) {
+                this.getContentPane().add(jLabel);
+            }
+        }
+    }
+
+    /**
+     * 加载图片
+     */
+    @SneakyThrows
+    private void loadImage() {
+        imageJLabelArrArr = ImageUtil.loadImagesAsGrid("assets/animal/animal3", 4, 4);
     }
 
     /**
@@ -59,10 +100,7 @@ public class GameJFrame extends JFrame {
         // 设置宽高
         this.setSize(603, 680);
         // 设置居中显示
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int x = (screenSize.width - this.getWidth()) / 2;
-        int y = (screenSize.height - this.getHeight()) / 2;
-        this.setLocation(x, y);
+        this.setLocationRelativeTo(null);
         // 设置界面置顶
         this.setAlwaysOnTop(true);
         // 去掉默认的居中放置
