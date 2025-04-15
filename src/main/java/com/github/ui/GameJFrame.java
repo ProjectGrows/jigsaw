@@ -272,6 +272,7 @@ public class GameJFrame extends JFrame implements KeyListener {
                 log.info("{}", Arrays.deepToString(data));
             }
             case 40 -> {
+                // 将空白方块上方的图片向下移动
                 log.info("{}", "下");
                 if (x == 0) {
                     return;
@@ -285,18 +286,19 @@ public class GameJFrame extends JFrame implements KeyListener {
         }
     }
 
+    /**
+     * 判断 data 数组和 win 数组中的数据是否一致
+     * @return true/false
+     */
     public boolean victory() {
         for (int i = 0; i < data.length; i++) {
-            // i : 依次表示二维数组 data里面的索引
-            // data[i]：依次表示每一个一维数组
+
             for (int j = 0; j < data[i].length; j++) {
                 if (data[i][j] != win[i][j]) {
-                    // 只要有一个数据不一样，则返回false
                     return false;
                 }
             }
         }
-        // 循环结束表示数组遍历比较完毕，全都一样返回true
         return true;
     }
 
