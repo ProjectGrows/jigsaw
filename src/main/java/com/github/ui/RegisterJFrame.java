@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * 注册的主界面，和注册相关逻辑都写在这个类中
+ * 注册的主界面
  */
 public class RegisterJFrame extends JFrame {
 
@@ -26,6 +26,4 @@ public class RegisterJFrame extends JFrame {
         // 设置居中显示
         this.setLocation(x, y);
     }
-
-
 }

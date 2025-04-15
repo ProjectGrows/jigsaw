@@ -14,4 +14,3 @@ public class Application {
         new GameJFrame();
     }
 }
-
