@@ -221,8 +221,33 @@ public class GameJFrame extends JFrame implements KeyListener {
     @Override
     public void keyTyped(KeyEvent e) {}
 
+    @SneakyThrows
     @Override
-    public void keyPressed(KeyEvent e) {}
+    public void keyPressed(KeyEvent e) {
+        int keyCode = e.getKeyCode();
+        log.info("{}", keyCode);
+        if (65 == keyCode) {
+            // 清空原本出现的图片
+            this.getContentPane().removeAll();
+            // 显示完整图片
+            URL resource = this.getClass().getClassLoader().getResource("assets/animal/animal3/all.jpg");
+            File file = new File(Objects.requireNonNull(resource).toURI());
+            JLabel allJLabel = new JLabel(new ImageIcon(file.getAbsolutePath()));
+            allJLabel.setBounds(83, 134, 420, 420);
+            this.getContentPane().add(allJLabel);
+            // 添加背景图片
+            URL bgURL = this.getClass().getClassLoader().getResource("assets/background.png");
+            JLabel bgJLabel = new JLabel(
+                    new ImageIcon(new File(Objects.requireNonNull(bgURL).toURI()).getAbsolutePath()));
+            // 指定图片位置
+            bgJLabel.setBounds(40, 40, 508, 560);
+            this.getContentPane().add(bgJLabel);
+            // 重新布局和重绘
+            this.getContentPane().revalidate();
+            // 刷新一下界面
+            this.getContentPane().repaint();
+        }
+    }
 
     @Override
     public void keyReleased(KeyEvent e) {
@@ -280,6 +305,10 @@ public class GameJFrame extends JFrame implements KeyListener {
                 swapImages(x, y, x - 1, y);
                 x--;
                 step++;
+                initImage();
+                log.info("{}", Arrays.deepToString(data));
+            }
+            case 65 -> {
                 initImage();
                 log.info("{}", Arrays.deepToString(data));
             }
