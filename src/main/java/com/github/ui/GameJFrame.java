@@ -23,8 +23,6 @@ import java.util.Random;
 public class GameJFrame extends JFrame implements KeyListener {
 
     private final int[][] data = new int[4][4];
-    // 图片路径
-    private final String path = "assets/animal/animal3/";
     // 定义一个二维数组，存储正确的数据
     int[][] win = {
         {1, 2, 3, 4},
@@ -32,6 +30,8 @@ public class GameJFrame extends JFrame implements KeyListener {
         {9, 10, 11, 12},
         {13, 14, 15, 0}
     };
+    // 图片路径
+    private String path = "assets/animal/animal3/";
     // 0 的横坐标
     private int x = 0;
     // 0 的纵坐标
@@ -51,6 +51,81 @@ public class GameJFrame extends JFrame implements KeyListener {
         initImage();
         // 让界面显示出来
         this.setVisible(true);
+    }
+
+    /**
+     * 创建改变图片的菜单
+     * @param jMenu 菜单
+     */
+    private void createChangeImageMenu(JMenu jMenu) {
+        JMenu changeImageMenu = new JMenu("更换图片");
+        JMenu changeAnimalMenu = createChangeAnimalImageMenu();
+        changeImageMenu.add(changeAnimalMenu);
+        JMenu changeGirlMenu = createChangeGirlImageMenu();
+        changeImageMenu.add(changeGirlMenu);
+        JMenu changeSportMenu = createChangeSportImageMenu();
+        changeImageMenu.add(changeSportMenu);
+        jMenu.add(changeImageMenu);
+    }
+
+    /**
+     * 创建更换美女的菜单
+     * @return 菜单
+     */
+    private JMenu createChangeGirlImageMenu() {
+        JMenu jMenu = new JMenu("更换美女");
+        for (int i = 1; i <= 13; i++) {
+            JMenuItem item = new JMenuItem("更换美女" + (i));
+            int finalI = i;
+            item.addActionListener(e -> {
+                path = "assets/girl/girl" + (finalI) + "/";
+                step = 0;
+                initData();
+                initImage();
+            });
+            jMenu.add(item);
+        }
+        return jMenu;
+    }
+
+    /**
+     * 创建更换运动的菜单
+     * @return 菜单
+     */
+    private JMenu createChangeSportImageMenu() {
+        JMenu jMenu = new JMenu("更换运动");
+        for (int i = 1; i <= 10; i++) {
+            JMenuItem item = new JMenuItem("更换运动" + (i));
+            int finalI = i;
+            item.addActionListener(e -> {
+                path = "assets/sport/sport" + (finalI) + "/";
+                step = 0;
+                initData();
+                initImage();
+            });
+            jMenu.add(item);
+        }
+        return jMenu;
+    }
+
+    /**
+     * 创建更换动物的菜单
+     * @return 菜单
+     */
+    private JMenu createChangeAnimalImageMenu() {
+        JMenu jMenu = new JMenu("更换动物");
+        for (int i = 0; i < 8; i++) {
+            JMenuItem item = new JMenuItem("更换动物" + i);
+            int finalI = i;
+            item.addActionListener(e -> {
+                path = "assets/animal/animal" + finalI + "/";
+                step = 0;
+                initData();
+                initImage();
+            });
+            jMenu.add(item);
+        }
+        return jMenu;
     }
 
     /**
@@ -171,29 +246,7 @@ public class GameJFrame extends JFrame implements KeyListener {
      */
     private JMenu createFunctionJMenu() {
         JMenu jMenu = new JMenu("功能");
-        JMenu changeImageMenu = new JMenu("更换图片");
-        JMenu changeAnimalMenu = new JMenu("更换动物");
-        JMenuItem changeAnimal1Item = new JMenuItem("更换动物1");
-        changeAnimalMenu.add(changeAnimal1Item);
-        JMenuItem changeAnimal2Item = new JMenuItem("更换动物2");
-        changeAnimalMenu.add(changeAnimal2Item);
-        JMenuItem changeAnimal3Item = new JMenuItem("更换动物3");
-        changeAnimalMenu.add(changeAnimal3Item);
-        JMenuItem changeAnimal4Item = new JMenuItem("更换动物4");
-        changeAnimalMenu.add(changeAnimal4Item);
-        JMenuItem changeAnimal5Item = new JMenuItem("更换动物5");
-        changeAnimalMenu.add(changeAnimal5Item);
-        JMenuItem changeAnimal6Item = new JMenuItem("更换动物6");
-        changeAnimalMenu.add(changeAnimal6Item);
-        JMenuItem changeAnimal7Item = new JMenuItem("更换动物7");
-        changeAnimalMenu.add(changeAnimal7Item);
-        JMenuItem changeAnimal8Item = new JMenuItem("更换动物8");
-        changeAnimalMenu.add(changeAnimal8Item);
-        changeImageMenu.add(changeAnimalMenu);
-        JMenu changeGirlMenu = new JMenu("更换美女");
-        changeImageMenu.add(changeGirlMenu);
-        JMenu changeSportMenu = new JMenu("更换运动");
-        changeImageMenu.add(changeSportMenu);
+        createChangeImageMenu(jMenu);
         // changeImagesJMenuItem.addActionListener(e -> {
         //     path = "assets/animal/animal2/";
         //     step = 0;
@@ -217,7 +270,6 @@ public class GameJFrame extends JFrame implements KeyListener {
         JMenuItem exitJMenuItem = new JMenuItem("退出");
         exitJMenuItem.addActionListener(e -> System.exit(0));
 
-        jMenu.add(changeImageMenu);
         jMenu.add(replayGameJMenuItem);
         jMenu.add(OneClickWinJMenuItem);
         jMenu.add(exitJMenuItem);
