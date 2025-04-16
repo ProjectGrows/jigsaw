@@ -20,7 +20,7 @@ import java.util.Random;
  * 游戏的主界面
  */
 @Slf4j
-public class GameJFrame extends JFrame implements KeyListener {
+public class GameJFrame extends JFrame implements KeyListener, ActionListener {
 
     private final int[][] data = new int[4][4];
     // 定义一个二维数组，存储正确的数据
@@ -30,6 +30,11 @@ public class GameJFrame extends JFrame implements KeyListener {
         {9, 10, 11, 12},
         {13, 14, 15, 0}
     };
+    // 功能下的选项
+    private final JMenuItem replayGameItem = new JMenuItem("重新游戏");
+    private final JMenuItem oneClickWinItem = new JMenuItem("一键通关");
+    private final JMenuItem exitItem = new JMenuItem("退出");
+    private final JMenuItem weiChatItem = new JMenuItem("微信公众号");
     // 图片路径
     private String path = "assets/animal/animal3/";
     // 0 的横坐标
@@ -248,26 +253,12 @@ public class GameJFrame extends JFrame implements KeyListener {
     private JMenu createFunctionJMenu() {
         JMenu jMenu = new JMenu("功能");
         createChangeImageMenu(jMenu);
-        JMenuItem replayGameJMenuItem = new JMenuItem("重新游戏");
-        replayGameJMenuItem.addActionListener(e -> {
-            step = 0;
-            initData();
-            initImage();
-        });
-        JMenuItem OneClickWinJMenuItem = new JMenuItem("一键通关");
-        OneClickWinJMenuItem.addActionListener(e -> {
-            step = 0;
-            for (int i = 0; i < win.length; i++) {
-                System.arraycopy(win[i], 0, data[i], 0, win[i].length);
-            }
-            initImage();
-        });
-        JMenuItem exitJMenuItem = new JMenuItem("退出");
-        exitJMenuItem.addActionListener(e -> System.exit(0));
-
-        jMenu.add(replayGameJMenuItem);
-        jMenu.add(OneClickWinJMenuItem);
-        jMenu.add(exitJMenuItem);
+        replayGameItem.addActionListener(this);
+        oneClickWinItem.addActionListener(this);
+        exitItem.addActionListener(this);
+        jMenu.add(replayGameItem);
+        jMenu.add(oneClickWinItem);
+        jMenu.add(exitItem);
         return jMenu;
     }
 
@@ -277,25 +268,8 @@ public class GameJFrame extends JFrame implements KeyListener {
     @SneakyThrows
     private JMenu createAboutJMenu() {
         JMenu jMenu = new JMenu("关于我们");
-        JMenuItem weichatJMenuItem = new JMenuItem("微信公众号");
-        weichatJMenuItem.addActionListener(new ActionListener() {
-            @SneakyThrows
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                GameJFrame.super.getContentPane().removeAll();
-                URL url = this.getClass().getClassLoader().getResource("assets/about.png");
-                JLabel jLabel = new JLabel(
-                        new ImageIcon(new File(Objects.requireNonNull(url).toURI()).getAbsolutePath()));
-                // 指定图片位置
-                jLabel.setBounds(150, 150, 258, 258);
-                GameJFrame.super.getContentPane().add(jLabel);
-                // 重新布局和重绘
-                GameJFrame.super.getContentPane().revalidate();
-                // 刷新一下界面
-                GameJFrame.super.getContentPane().repaint();
-            }
-        });
-        jMenu.add(weichatJMenuItem);
+        weiChatItem.addActionListener(this);
+        jMenu.add(weiChatItem);
         return jMenu;
     }
 
@@ -425,5 +399,36 @@ public class GameJFrame extends JFrame implements KeyListener {
         int tempData = data[row1][col1];
         data[row1][col1] = data[row2][col2];
         data[row2][col2] = tempData;
+    }
+
+    @SneakyThrows
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Object source = e.getSource();
+        if (replayGameItem == source) {
+            step = 0;
+            initData();
+            initImage();
+        } else if (oneClickWinItem == source) {
+            step = 0;
+            for (int i = 0; i < win.length; i++) {
+                System.arraycopy(win[i], 0, data[i], 0, win[i].length);
+            }
+            initImage();
+        } else if (exitItem == source) {
+            System.exit(0);
+        } else if (weiChatItem == source) {
+            this.getContentPane().removeAll();
+            URL url = this.getClass().getClassLoader().getResource("assets/about.png");
+            JLabel jLabel = new JLabel(
+                    new ImageIcon(new File(Objects.requireNonNull(url).toURI()).getAbsolutePath()));
+            // 指定图片位置
+            jLabel.setBounds(150, 150, 258, 258);
+            this.getContentPane().add(jLabel);
+            // 重新布局和重绘
+            this.getContentPane().revalidate();
+            // 刷新一下界面
+            this.getContentPane().repaint();
+        }
     }
 }
