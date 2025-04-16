@@ -24,7 +24,7 @@ public class GameJFrame extends JFrame implements KeyListener {
 
     private final int[][] data = new int[4][4];
     // 定义一个二维数组，存储正确的数据
-    int[][] win = {
+    private final int[][] win = {
         {1, 2, 3, 4},
         {5, 6, 7, 8},
         {9, 10, 11, 12},
@@ -247,12 +247,6 @@ public class GameJFrame extends JFrame implements KeyListener {
     private JMenu createFunctionJMenu() {
         JMenu jMenu = new JMenu("功能");
         createChangeImageMenu(jMenu);
-        // changeImagesJMenuItem.addActionListener(e -> {
-        //     path = "assets/animal/animal2/";
-        //     step = 0;
-        //     initData();
-        //     initImage();
-        // });
         JMenuItem replayGameJMenuItem = new JMenuItem("重新游戏");
         replayGameJMenuItem.addActionListener(e -> {
             step = 0;
@@ -287,12 +281,17 @@ public class GameJFrame extends JFrame implements KeyListener {
             @SneakyThrows
             @Override
             public void actionPerformed(ActionEvent e) {
+                GameJFrame.super.getContentPane().removeAll();
                 URL url = this.getClass().getClassLoader().getResource("assets/about.png");
                 JLabel jLabel = new JLabel(
                         new ImageIcon(new File(Objects.requireNonNull(url).toURI()).getAbsolutePath()));
                 // 指定图片位置
-                jLabel.setBounds(40, 40, 258, 258);
+                jLabel.setBounds(150, 150, 258, 258);
                 GameJFrame.super.getContentPane().add(jLabel);
+                // 重新布局和重绘
+                GameJFrame.super.getContentPane().revalidate();
+                // 刷新一下界面
+                GameJFrame.super.getContentPane().repaint();
             }
         });
         jMenu.add(weichatJMenuItem);
