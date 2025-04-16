@@ -418,17 +418,25 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
         } else if (exitItem == source) {
             System.exit(0);
         } else if (weiChatItem == source) {
-            this.getContentPane().removeAll();
             URL url = this.getClass().getClassLoader().getResource("assets/about.png");
             JLabel jLabel = new JLabel(
                     new ImageIcon(new File(Objects.requireNonNull(url).toURI()).getAbsolutePath()));
             // 指定图片位置
-            jLabel.setBounds(150, 150, 258, 258);
-            this.getContentPane().add(jLabel);
-            // 重新布局和重绘
-            this.getContentPane().revalidate();
-            // 刷新一下界面
-            this.getContentPane().repaint();
+            jLabel.setBounds(0, 0, 258, 258);
+            // 创建弹框对象
+            JDialog jDialog = new JDialog();
+            // 将图片添加到弹框中
+            jDialog.getContentPane().add(jLabel);
+            // 给弹框设置大小
+            jDialog.setSize(344, 344);
+            // 弹框置顶
+            jDialog.setAlwaysOnTop(true);
+            // 弹框居中
+            jDialog.setLocationRelativeTo(null);
+            // 弹框不关闭无法执行下面的操作
+            jDialog.setModal(true);
+            // 弹框显示出来
+            jDialog.setVisible(true);
         }
     }
 }
