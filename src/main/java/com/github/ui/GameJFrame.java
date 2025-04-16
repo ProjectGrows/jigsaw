@@ -114,7 +114,7 @@ public class GameJFrame extends JFrame implements KeyListener {
      */
     private JMenu createChangeAnimalImageMenu() {
         JMenu jMenu = new JMenu("更换动物");
-        for (int i = 0; i < 8; i++) {
+        for (int i = 1; i <= 8; i++) {
             JMenuItem item = new JMenuItem("更换动物" + i);
             int finalI = i;
             item.addActionListener(e -> {
@@ -186,6 +186,7 @@ public class GameJFrame extends JFrame implements KeyListener {
                 if (num == 0) {
                     imageIcon = new ImageIcon();
                 } else {
+                    log.info("{}", path);
                     URL resource = this.getClass().getClassLoader().getResource(path + num + ".jpg");
                     File file = new File(Objects.requireNonNull(resource).toURI());
                     imageIcon = new ImageIcon(file.getAbsolutePath());
